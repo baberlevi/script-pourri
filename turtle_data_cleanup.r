@@ -17,30 +17,31 @@ missingampm <- length(npt_df$AP[is.na(npt_df$AP) & is.na(npt_df$Time)])
 
 for (i in  1:12){
 
+  #setup new column name
+  new_left_col <- paste0("leftScute", as.character(i))
+  #create the new column, fill it with false
+  npt_df[[new_left_col]] <- FALSE
+
+  #setup new column name
+  new_right_col <- paste0("rightScute", as.character(i))
+  #create the new column, fill it with false
+  npt_df[[new_right_col]] <- FALSE
+
+
   #Left scute marks
   for (j in 1:4){
-    #setup new column name
-    new_col <- paste0("leftScute", as.character(i))
-    #create the new column, fill it with false
-    npt_df[[new_col]] <- FALSE
-
     #look at one legacy col at a time
     legacy_col <- paste0("L",as.character(j))
     #fill in true where appropriate in the new column based on the legacy column
-    npt_df[!is.na(npt_df[[legacy_col]]) & npt_df[[legacy_col]]== i , new_col] <- TRUE
+    npt_df[(!is.na(npt_df[[legacy_col]])) & npt_df[[legacy_col]]== i , new_left_col] <- TRUE
   }
 
   #Right scute marks
   for (j in 1:3){
-    #setup new column name
-    new_col <- paste0("rightScute", as.character(i))
-    #create the new column, fill it with false
-    npt_df[[new_col]] <- FALSE
-
     #look at one legacy col at a time
     legacy_col <- paste0("R",as.character(j))
     #fill in true where appropriate in the new column based on the legacy column
-    npt_df[!is.na(npt_df[[legacy_col]]) & npt_df[[legacy_col]]== i , new_col] <- TRUE
+    npt_df[!is.na(npt_df[[legacy_col]]) & npt_df[[legacy_col]]== i , new_right_col] <- TRUE
   }
 }
 
