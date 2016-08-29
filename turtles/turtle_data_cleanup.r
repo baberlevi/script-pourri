@@ -47,4 +47,4 @@ for (i in  1:12){
 
 
 #write out a new file of the cleaned data
-write.table(npt_df, file = "turtlebase_cleaned.csv", sep=",", na="null")
+write.table(npt_df, file = "turtlebase_cleaned.csv", sep=",", na="null", row.names = FALSE)
