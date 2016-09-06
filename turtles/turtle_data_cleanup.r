@@ -59,7 +59,7 @@ npt_df <- npt_df[!is.na(npt_df$Time),]
 npt_df <- transform(npt_df, IndividualID=as.numeric(factor(TrueID)))
 
 #Every row in original dataset is an observation, create an ObservationID for each row
-ObservationID <- rownames(npt_df)
+ObservationID <- paste0("5000", rownames(npt_df))
 npt_df <- cbind(ObservationID=ObservationID, npt_df)
 
 #load sqldf library to allow select statements from dataframe
@@ -71,3 +71,7 @@ npt_df <- cbind(ObservationID=ObservationID, npt_df)
 
 #write out a new file of the cleaned data (this will be used for individual, observation, and dynamic_characteristics)
 write.table(npt_df, file = "turtlebase_cleaned.csv", sep=",", na="null", row.names = FALSE)
+
+#eggs and nests
+egg_df <- npt_df[,c("ObservationID", "IndividualID", "egg1", "egg2", "egg3")]
+library(reshape)

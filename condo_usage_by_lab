@@ -1,0 +1,10 @@
+#!/bin/bash
+
+#                          Wallclock          Average Average
+#Username    Group   #jobs      days  Percent  #nodes  q-days  Full name
+#--------    -----   ----- ---------  ------- ------- -------  ---------
+
+#strip header
+#strip leading spaces
+#swap spaces for commas
+pbsacct 201608?? | tail -n +13 | sed 's/^ *//g' | tr -s ' ' ','
