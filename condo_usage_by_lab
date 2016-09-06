@@ -7,4 +7,11 @@
 #strip header
 #strip leading spaces
 #swap spaces for commas
-pbsacct 201608?? | tail -n +13 | sed 's/^ *//g' | tr -s ' ' ','
+
+#run this on condo headnode
+
+for month in {01..12}; do
+  pbsacct "2016$month??"" | tail -n +13 | sed 's/^ *//g' | tr -s ' ' ',' > ~/condo_las_2016$month
+done;
+
+cat condo_las_201608 | cut -f 1 -d ',' | xargs -I user ldapsearch -Q "(cn=user)" memberOf | grep '\-lab' | cut -f 2 -d ':' | cut -f 1 -d ',' | cut -f 2 -d '='
