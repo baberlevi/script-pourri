@@ -1,5 +1,5 @@
 #read in the file as a dataframe
-npt_df <- read.table("NestingPlusTrapping.txt", header=TRUE)
+npt_df <- read.table("NestingPlusTrapping_2016update.txt", header=TRUE, stringsAsFactors=FALSE)
 
 #one record has a mixedcase Pm, updating for consistency
 npt_df[npt_df$AP == "Pm" & !is.na(npt_df$AP), c("AP")] <- "PM"
@@ -46,21 +46,21 @@ for (i in  1:12){
 }
 
 
+#The males are all missing an observation time
+#filling with 12PM for now //TODO: talk to Luke
+npt_df[is.na(npt_df$Time),] <- "1200"
+
 #npt_df[,"ObservationDateTime"] <- as.POSIXct(paste(npt_df$Date, npt_df$Time), format="%m/%d/%Y %H%M")
 npt_df[,"ObservationDateTime"] <- paste(npt_df$Date, npt_df$Time)
 #TODO: deal with blank times
 
 #for now (20160901 - per email with Luke), remove all the rows that have no TrueID. Later they need to go in.
 npt_df <- npt_df[!is.na(npt_df$TrueID),]
-#temporarily - remove observation dates missing a time
-npt_df <- npt_df[!is.na(npt_df$Time),]
+
 
 #Use the 'TrueID' column as a unique key to generate new seqential IndividualID
-npt_df <- transform(npt_df, IndividualID=as.numeric(factor(TrueID)))
-
-#Every row in original dataset is an observation, create an ObservationID for each row
-ObservationID <- paste0("5000", rownames(npt_df))
-npt_df <- cbind(ObservationID=ObservationID, npt_df)
+#not using this anymore, but useful example
+#npt_df <- transform(npt_df, IndividualID=as.numeric(factor(TrueID)))
 
 #load sqldf library to allow select statements from dataframe
 #library(sqldf)
@@ -70,8 +70,4 @@ npt_df <- cbind(ObservationID=ObservationID, npt_df)
 #npt_df <- npt_df[order(npt_df[,"IndividualID"]),]
 
 #write out a new file of the cleaned data (this will be used for individual, observation, and dynamic_characteristics)
-write.table(npt_df, file = "turtlebase_cleaned.csv", sep=",", na="null", row.names = FALSE)
-
-#eggs and nests
-egg_df <- npt_df[,c("ObservationID", "IndividualID", "egg1", "egg2", "egg3")]
-library(reshape)
+write.table(npt_df, file = "turtlebase_cleaned_20161018.csv", sep=",", na="null", row.names = FALSE)
