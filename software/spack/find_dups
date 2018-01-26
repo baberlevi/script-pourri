@@ -1,0 +1,4 @@
+#!/bin/bash
+
+#assumes the spack modules are the only ones in your $MODULEPATH
+module --ignore-cache avail -t |& grep -E '.*/[0-9]+' | cut -d '/' -f 1 | sort | uniq -d
