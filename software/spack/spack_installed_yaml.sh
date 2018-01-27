@@ -1,1 +1,7 @@
-spack find -l | cut -d ' ' -f 1 | grep -i -e [0-9][a-z] |xargs -I hash spack spec -y /hash >> ~/spack_installed.yaml
+#!/bin/bash
+for package in $(spack find -l | grep -v - | xargs -n2 echo | tr ' ' ,)
+do 
+    hash=$(echo $package | cut -d ',' -f 1 | grep -i -e [0-9,a-z] ) 
+    pkgname=$(echo $package | cut -d ',' -f 2 | cut -d '@' -f 1 | grep -i -e [0-9,a-z] ) 
+    spack spec -y /$hash > $pkgname-$hash.yaml
+done
